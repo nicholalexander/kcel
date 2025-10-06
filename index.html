@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate cryptographically secure passphrases using the EFF diceware method. No tracking, no ads, completely private.">
+    <title>Secure Passphrase Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="container">
+        <header>
+            <h1>Secure Passphrase Generator</h1>
+            <p class="subtitle">Cryptographically strong passphrases using EFF's diceware method</p>
+        </header>
+
+        <section class="generator-section">
+            <div class="controls">
+                <label for="word-count">Number of words:</label>
+                <select id="word-count">
+                    <option value="4">4 words (52 bits)</option>
+                    <option value="5">5 words (65 bits)</option>
+                    <option value="6" selected>6 words (78 bits) - Recommended</option>
+                    <option value="7">7 words (90 bits)</option>
+                    <option value="8">8 words (103 bits) - High Security</option>
+                    <option value="9">9 words (116 bits)</option>
+                    <option value="10">10 words (129 bits) - Maximum</option>
+                </select>
+                <button id="generate-btn" class="generate-button">Generate Passphrase</button>
+            </div>
+
+            <div id="passphrase-display" class="passphrase-display hidden">
+                <div class="passphrase-container">
+                    <p id="passphrase" class="passphrase"></p>
+                    <button id="copy-btn" class="copy-button" aria-label="Copy passphrase">
+                        <span class="copy-text">Copy to Clipboard</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="security-info" class="security-info hidden">
+                <h2>Security Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Entropy:</span>
+                        <span id="entropy" class="info-value"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Possible combinations:</span>
+                        <span id="combinations" class="info-value"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Time to crack (1 billion/sec):</span>
+                        <span id="crack-time" class="info-value"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about">
+            <h2>About This Generator</h2>
+            <ul>
+                <li><strong>Cryptographically Secure:</strong> Uses Web Crypto API for true randomness</li>
+                <li><strong>No Tracking:</strong> Completely private, no data collection</li>
+                <li><strong>Open Source:</strong> All code is visible and auditable</li>
+                <li><strong>EFF Word List:</strong> 7,776 carefully selected words</li>
+                <li><strong>Offline-First:</strong> Works without internet connection</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>
+                <a href="https://github.com/yourusername/passphrase-generator" target="_blank" rel="noopener">View Source on GitHub</a>
+                |
+                <a href="https://www.eff.org/dice" target="_blank" rel="noopener">Learn about EFF Diceware</a>
+            </p>
+            <p class="disclaimer">
+                Each passphrase is generated using cryptographically secure randomness.
+                Once generated, it cannot be reproduced.
+            </p>
+        </footer>
+    </main>
+
+    <script src="wordlist.js"></script>
+    <script src="passphrase.js"></script>
+</body>
+</html>
