@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Passphrase Generator</title>
+</head>
+<body>
+    <h1>Secure Passphrase Generator</h1>
+    <p><em>Ultra-secure 20-word passphrases using EFF's diceware method</em></p>
+
+    <hr>
+
+    <h2>Generate</h2>
+
+    <p>Generates a 20-word passphrase (258.5 bits of entropy)</p>
+
+    <form onsubmit="return false;">
+        <button id="generate-btn" type="button">Generate New Passphrase</button>
+    </form>
+
+    <div id="passphrase-display" style="display: none;">
+        <h3>Your Passphrase:</h3>
+        <p><code id="passphrase" style="font-size: 1.2em; background: #f0f0f0; padding: 10px; display: inline-block;"></code></p>
+        <br>
+        <button id="copy-btn" type="button">Copy to Clipboard</button>
+        <span id="copy-feedback"></span>
+    </div>
+
+    <hr>
+
+    <p><a href="about.html">About this generator →</a></p>
+
+    <script src="wordlist.js"></script>
+    <script src="passphrase.js"></script>
+</body>
+</html>

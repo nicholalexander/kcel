@@ -1,0 +1,21 @@
+{
+  "name": "secure-passphrase-generator",
+  "version": "1.0.0",
+  "description": "Ultra-secure 20-word passphrase generator using cryptographically secure randomness",
+  "scripts": {
+    "build": "node build.js",
+    "serve": "python3 -m http.server 8080 --directory dist",
+    "serve-dev": "python3 -m http.server 8080 --directory src",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "passphrase",
+    "security",
+    "cryptography",
+    "diceware",
+    "password-generator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "private": true
+}

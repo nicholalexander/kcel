@@ -137,10 +137,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const copyBtn = document.getElementById('copy-btn');
     const passphraseDisplay = document.getElementById('passphrase-display');
     const passphraseElement = document.getElementById('passphrase');
-    const securityInfo = document.getElementById('security-info');
-    const entropyElement = document.getElementById('entropy');
-    const combinationsElement = document.getElementById('combinations');
-    const crackTimeElement = document.getElementById('crack-time');
 
     // Generate button handler
     generateBtn.addEventListener('click', function() {
@@ -153,17 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Display passphrase
             passphraseElement.textContent = passphrase;
             passphraseDisplay.style.display = 'block';
-
-            // Calculate and display security metrics
-            const entropy = calculateEntropy(wordCount);
-            const combinations = calculateCombinations(wordCount);
-            const crackTime = calculateCrackTime(combinations);
-
-            entropyElement.textContent = `${entropy.toFixed(1)} bits`;
-            combinationsElement.textContent = formatLargeNumber(combinations);
-            crackTimeElement.textContent = crackTime;
-
-            securityInfo.style.display = 'block';
 
             // Reset copy button feedback
             document.getElementById('copy-feedback').textContent = '';
