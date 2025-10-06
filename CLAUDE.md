@@ -1,136 +1,127 @@
-# Secure Identity Passphrase Generator
+# kcel - Ultra-Secure Passphrase Generator
 
 ## Project Overview
-A simple, secure, single-page website for generating cryptographically strong passphrases that are:
-- Mathematically unbreakable and unguessable
-- Generated using proper cryptographic randomness
-- Never reproducible (each generation is unique)
-- Fully verifiable through open-source code
+A brutalist, ultra-secure passphrase generator deployed at [kcel.io](https://kcel.io) that creates:
+- Fixed 20-word passphrases with 258.5 bits of entropy
+- Cryptographically secure generation using Web Crypto API
+- Unique, non-reproducible passphrases
+- Zero tracking, zero analytics, zero third-party resources
 
 ## Core Principles
-1. **Security First**: Use Web Crypto API for true randomness
-2. **Simplicity**: Single HTML page, no backend, no dependencies
-3. **Privacy**: No tracking, no analytics, no user data collection
-4. **Transparency**: All code visible and auditable
-5. **Minimalism**: Only essential features (generate, display, copy)
+1. **Maximum Security**: 258.5 bits of entropy (uncrackable)
+2. **Brutalist Design**: Pure HTML, no CSS frameworks
+3. **Privacy First**: No tracking, no cookies, no analytics
+4. **Offline-First**: Service Worker caches everything after first visit
+5. **API Access**: JSON endpoint for programmatic access
 
-## Technical Approach
+## Technical Implementation
 
-### Cryptographic Requirements
-- Use `crypto.getRandomValues()` for cryptographically secure random number generation
-- Implement proper entropy calculations
-- Use established word lists (EFF's long word list recommended)
-- Ensure sufficient entropy (minimum 77 bits for strong security)
+### Cryptographic Approach
+- Uses `crypto.getRandomValues()` for true randomness
+- EFF's long word list (7,776 words = 12.925 bits per word)
+- Fixed 20 words = 258.5 bits total entropy
+- Would take ~10⁶¹ years to crack at 1 billion attempts/second
+- No Math.random() or weak PRNGs
 
-### Passphrase Generation Method
-1. **Word List**: Use EFF's long word list (7,776 words = 12.925 bits per word)
-2. **Default Length**: 6 words = ~77.5 bits of entropy
-3. **Separator**: Use hyphens between words for readability
-4. **No Patterns**: Each word selection completely independent
-
-### Security Guarantees
-- **Entropy Calculation**: Display actual entropy bits
-- **Time to Crack**: Show estimated time at various attack speeds
-- **Uniqueness**: Mathematical probability of regeneration effectively zero
-- **No State**: No seeds, no reproducibility, no predictability
+### Deployment
+- **Live Site**: [https://kcel.io](https://kcel.io)
+- **Platform**: Cloudflare Workers (edge computing)
+- **CDN**: 200+ global locations
+- **Compression**: Brotli, ~20KB gzipped total
 
 ## File Structure
 ```
-/
-├── index.html       # Single page application
-├── style.css        # Minimal, clean styling
-├── passphrase.js    # Core generation logic
-├── wordlist.js      # EFF word list (7,776 words)
-└── CLAUDE.md        # This documentation
+├── src/
+│   ├── index.html       # Main generator page
+│   ├── about.html       # About/security information
+│   ├── why.html         # Identity verification rationale
+│   ├── passphrase.js    # Core generation logic
+│   └── wordlist.js      # EFF word list (7,776 words)
+├── dist/                # Production build output
+│   ├── worker.js        # Cloudflare Worker with API
+│   ├── sw.js           # Service Worker for offline
+│   └── ...             # Minified assets
+├── worker.js           # API endpoint source
+├── build.js            # Build system (Terser + html-minifier)
+├── wrangler.json       # Cloudflare Workers config
+└── package.json        # Dependencies and scripts
 ```
 
-## Implementation Plan
+## API Endpoint
 
-### Phase 1: Core Functionality
-1. Set up basic HTML structure
-2. Implement cryptographic random number generation
-3. Integrate EFF word list
-4. Create passphrase generation algorithm
-5. Add entropy calculation display
+### GET /api/passphrase
+Returns JSON with a cryptographically secure passphrase:
+```json
+{
+  "passphrase": "word1-word2-...-word20",
+  "timestamp": "2025-10-06T12:00:00.000Z"
+}
+```
 
-### Phase 2: User Interface
-1. Clean, minimal design
-2. Generate button
-3. Passphrase display area
-4. Copy to clipboard functionality
-5. Entropy and security information display
+**Features:**
+- Cryptographically secure (uses crypto.getRandomValues)
+- Never cached (Cache-Control headers prevent caching)
+- CORS enabled
+- ISO 8601 timestamp
 
-### Phase 3: Validation & Testing
-1. Verify cryptographic randomness
-2. Test entropy calculations
-3. Ensure no predictable patterns
-4. Cross-browser compatibility testing
-5. Security audit checklist
+## Build System
 
-## Security Considerations
+### Commands
+```bash
+npm run build       # Build production files to dist/
+npm run serve       # Serve production build locally
+npm run serve-dev   # Serve development files
+npm run deploy      # Deploy to Cloudflare Workers
+npm run clean       # Remove dist folder
+```
 
-### What We're Protecting Against
-- **Brute Force**: Sufficient entropy makes exhaustive search infeasible
-- **Dictionary Attacks**: Large word list with random selection
-- **Pattern Analysis**: No predictable patterns or sequences
-- **Side-Channel**: No server communication, all client-side
+### Build Process
+1. Compresses wordlist from 114KB to 61KB (47% reduction)
+2. Minifies JavaScript with Terser
+3. Minifies HTML with html-minifier-terser
+4. Creates Service Worker for offline functionality
+5. Builds Worker with embedded wordlist for API
+6. Total size: ~68KB (~20KB gzipped)
 
-### Cryptographic Legitimacy
-- Uses browser's Web Crypto API (CSPRNG)
-- No Math.random() or weak PRNGs
-- Entropy calculations based on information theory
-- Open source for community verification
+## Security Features
 
-## User Experience
-- Single button press to generate
-- Clear display of passphrase
-- One-click copy to clipboard
-- Visible entropy information
-- No distractions or unnecessary features
+### Implemented
+- ✅ 258.5 bits of entropy (20 words × 12.925 bits)
+- ✅ Cryptographically secure random generation
+- ✅ Service Worker excludes API from cache
+- ✅ No tracking, analytics, or third-party resources
+- ✅ Offline-capable after first visit
+- ✅ API endpoint with proper cache headers
 
-## Ethical Considerations
-- No data collection whatsoever
-- No third-party resources (self-contained)
-- Educational component about password security
-- Clear about limitations and proper use
+### Protection Against
+- **Brute Force**: 7.59 × 10⁷⁷ possible combinations
+- **Pattern Analysis**: Each word selection independent
+- **Cache Poisoning**: API responses never cached
+- **Network Attacks**: HTTPS only via Cloudflare
 
-## Implementation Status
+## Development Notes
 
-### ✅ Completed
-- **index.html**: Full HTML structure with semantic markup
-  - Header with title and subtitle
-  - Passphrase display area with copy button
-  - Word count selector (4-8 words)
-  - Generate button
-  - Security information display
-  - Privacy-focused footer
-- **style.css**: Clean, minimal CSS styling
-  - Responsive design
-  - Dark mode support
-  - Professional color scheme
-  - Smooth animations
-- **wordlist.js**: EFF long word list integrated
-  - 7,776 words for maximum entropy
-  - Clean array format
-- **passphrase.js**: Core cryptographic implementation
-  - Uses crypto.getRandomValues() for CSPRNG
-  - Proper entropy calculations
-  - Time-to-crack estimates
-  - Copy to clipboard functionality
-  - No weak randomness sources
+### Service Worker
+- Caches static assets only (HTML, JS)
+- Bypasses cache for `/api/*` routes
+- Enables offline functionality
 
-### 🔒 Security Features Implemented
-- Cryptographically secure random number generation
-- Real-time entropy calculations
-- Combination count display
-- Time-to-crack estimates at 1 billion attempts/second
-- Client-side only operation (no server communication)
-- No tracking or analytics
-- No external dependencies
+### Worker Script
+- Handles routing for API and static files
+- Embeds full wordlist for API generation
+- Uses same cryptographic functions as frontend
 
-### 📊 Technical Details
-- Default: 6 words = ~77.5 bits of entropy
-- Options: 4-8 words (52-103 bits of entropy)
-- Word separator: hyphens for readability
-- Each generation completely independent
-- No reproducibility or predictable patterns
+### Why Page
+The `/why` page presents a stark reminder about identity verification in the age of AI deepfakes and voice cloning. Written from a cold, computational perspective to emphasize the importance of strong authentication.
+
+## Performance
+- **Total Size**: 146KB uncompressed
+- **Gzipped**: ~44KB over the wire
+- **Edge Deployment**: <50ms latency globally
+- **Offline**: Works without internet after first visit
+
+## Contributing
+Pull requests welcome. Maintain brutalist aesthetic and security focus.
+
+## License
+MIT License - Copyright (c) 2024 Nichol Alexander
