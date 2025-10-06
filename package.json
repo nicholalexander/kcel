@@ -6,7 +6,8 @@
     "build": "node build.js",
     "serve": "python3 -m http.server 8080 --directory dist",
     "serve-dev": "python3 -m http.server 8080 --directory src",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "deploy": "npx wrangler deploy --assets=./dist"
   },
   "keywords": [
     "passphrase",
