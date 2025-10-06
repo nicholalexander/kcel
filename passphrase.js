@@ -135,7 +135,6 @@ async function copyToClipboard(text) {
 document.addEventListener('DOMContentLoaded', function() {
     const generateBtn = document.getElementById('generate-btn');
     const copyBtn = document.getElementById('copy-btn');
-    const wordCountSelect = document.getElementById('word-count');
     const passphraseDisplay = document.getElementById('passphrase-display');
     const passphraseElement = document.getElementById('passphrase');
     const securityInfo = document.getElementById('security-info');
@@ -145,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Generate button handler
     generateBtn.addEventListener('click', function() {
-        const wordCount = parseInt(wordCountSelect.value);
+        const wordCount = 20; // Fixed at 20 words
 
         try {
             // Generate passphrase
@@ -153,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Display passphrase
             passphraseElement.textContent = passphrase;
-            passphraseDisplay.classList.remove('hidden');
+            passphraseDisplay.style.display = 'block';
 
             // Calculate and display security metrics
             const entropy = calculateEntropy(wordCount);
@@ -164,12 +163,10 @@ document.addEventListener('DOMContentLoaded', function() {
             combinationsElement.textContent = formatLargeNumber(combinations);
             crackTimeElement.textContent = crackTime;
 
-            securityInfo.classList.remove('hidden');
+            securityInfo.style.display = 'block';
 
-            // Reset copy button
-            copyBtn.classList.remove('copied');
-            const copyText = copyBtn.querySelector('.copy-text');
-            copyText.textContent = 'Copy to Clipboard';
+            // Reset copy button feedback
+            document.getElementById('copy-feedback').textContent = '';
 
         } catch (error) {
             console.error('Error generating passphrase:', error);
@@ -181,13 +178,12 @@ document.addEventListener('DOMContentLoaded', function() {
     copyBtn.addEventListener('click', async function() {
         const passphrase = passphraseElement.textContent;
         const success = await copyToClipboard(passphrase);
+        const feedbackElement = document.getElementById('copy-feedback');
 
         if (success) {
-            copyBtn.classList.add('copied');
+            feedbackElement.textContent = ' ✓ Copied!';
             setTimeout(() => {
-                copyBtn.classList.remove('copied');
-                const copyText = copyBtn.querySelector('.copy-text');
-                copyText.textContent = 'Copy to Clipboard';
+                feedbackElement.textContent = '';
             }, 2000);
         } else {
             alert('Failed to copy to clipboard. Please select and copy manually.');
@@ -202,4 +198,5 @@ document.addEventListener('DOMContentLoaded', function() {
 console.log('Passphrase Generator Loaded');
 console.log('Word list size:', EFF_WORDLIST ? EFF_WORDLIST.length : 'Not loaded');
 console.log('Bits per word:', BITS_PER_WORD.toFixed(3));
+console.log('Total entropy (20 words):', (20 * BITS_PER_WORD).toFixed(1) + ' bits');
 console.log('Crypto API available:', window.crypto && window.crypto.getRandomValues ? 'Yes' : 'No');
