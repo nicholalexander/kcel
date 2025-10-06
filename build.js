@@ -240,6 +240,44 @@ async function showResults() {
     console.log(`  ${'Gzipped (est.)'.padEnd(20)} ~${(totalSize * 0.3).toFixed(1)}KB`);
 }
 
+async function buildWorker() {
+    console.log('🔧 Building worker with API...');
+
+    // Read the worker template
+    const workerTemplate = await fs.readFile('worker.js', 'utf8');
+
+    // Read the compressed wordlist
+    const wordlistContent = await fs.readFile('src/wordlist.js', 'utf8');
+    const match = wordlistContent.match(/const EFF_WORDLIST = \[([\s\S]*?)\]/);
+    if (!match) throw new Error('Could not find wordlist array');
+
+    const wordsSection = match[1];
+    const words = wordsSection.match(/"([^"]+)"/g).map(w => w.replace(/"/g, ''));
+
+    // Replace the placeholder with actual wordlist
+    const workerWithWordlist = workerTemplate.replace(
+        'const EFF_WORDLIST = [];',
+        `const EFF_WORDLIST = [${words.map(w => `"${w}"`).join(',')}];`
+    );
+
+    // Minify the worker
+    const minified = await minifyJS(workerWithWordlist, {
+        compress: {
+            dead_code: true,
+            drop_console: true,
+            drop_debugger: true,
+            passes: 2
+        },
+        mangle: false, // Don't mangle to keep it readable for Cloudflare
+        format: {
+            comments: false
+        }
+    });
+
+    await fs.writeFile('dist/worker.js', minified.code);
+    console.log('  ✓ Worker built with API endpoint');
+}
+
 async function build() {
     console.log('🔨 Starting production build...\n');
 
@@ -252,6 +290,7 @@ async function build() {
         await createManifest();
         await createHeaders();
         await copyAssets();
+        await buildWorker();
         await showResults();
 
         console.log('\n✅ Build completed successfully!');

@@ -1,5 +1,6 @@
 {
   "name": "kcel",
+  "main": "./dist/worker.js",
   "compatibility_date": "2025-10-06",
   "assets": {
     "directory": "./dist"
