@@ -7780,6 +7780,11 @@ const EFF_WORDLIST = [
 ];
 
 // Verify wordlist integrity
-if (EFF_WORDLIST.length \!== 7776) {
+if (EFF_WORDLIST.length !== 7776) {
     console.error('ERROR: Wordlist corrupted. Expected 7776 words, got', EFF_WORDLIST.length);
+}
+
+// Make wordlist available globally for browser environment
+if (typeof window !== 'undefined') {
+    window.EFF_WORDLIST = EFF_WORDLIST;
 }
