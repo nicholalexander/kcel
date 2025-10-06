@@ -34,7 +34,6 @@ A brutalist, ultra-secure passphrase generator deployed at [kcel.io](https://kce
 ├── src/
 │   ├── index.html       # Main generator page
 │   ├── about.html       # About/security information
-│   ├── why.html         # Identity verification rationale
 │   ├── passphrase.js    # Core generation logic
 │   └── wordlist.js      # EFF word list (7,776 words)
 ├── dist/                # Production build output
@@ -110,9 +109,6 @@ npm run clean       # Remove dist folder
 - Handles routing for API and static files
 - Embeds full wordlist for API generation
 - Uses same cryptographic functions as frontend
-
-### Why Page
-The `/why` page presents a stark reminder about identity verification in the age of AI deepfakes and voice cloning. Written from a cold, computational perspective to emphasize the importance of strong authentication.
 
 ## Performance
 - **Total Size**: 146KB uncompressed

@@ -87,7 +87,7 @@ async function minifyPassphrase() {
 async function createServiceWorker() {
     console.log('⚙️  Creating service worker...');
     const sw = `const CACHE_NAME='passphrase-v1';
-const urlsToCache=['/','/wordlist.js','/app.js','/about','/why'];
+const urlsToCache=['/','/wordlist.js','/app.js','/about'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(urlsToCache)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(n=>Promise.all(n.map(n=>n!==CACHE_NAME?caches.delete(n):null))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{const url=new URL(e.request.url);if(url.pathname.includes('/api/')){e.respondWith(fetch(e.request));return;}e.respondWith(caches.match(e.request).then(r=>{if(r)return r;const f=e.request.clone();return fetch(f).then(r=>{if(!r||r.status!==200||r.type!=='basic')return r;const c=r.clone();caches.open(CACHE_NAME).then(a=>a.put(e.request,c));return r})}))});`;
@@ -143,19 +143,7 @@ async function processHTML() {
     });
 
     await fs.writeFile('dist/about.html', minifiedAbout);
-
-    // Process why.html
-    const whyContent = await fs.readFile('src/why.html', 'utf8');
-    const minifiedWhy = await minifyHTML(whyContent, {
-        collapseWhitespace: true,
-        removeComments: true,
-        removeRedundantAttributes: true,
-        removeScriptTypeAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        useShortDoctype: true
-    });
-
-    await fs.writeFile('dist/why.html', minifiedWhy);
+    
     console.log('  ✓ HTML files minified');
 }
 
