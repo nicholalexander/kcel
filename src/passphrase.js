@@ -178,10 +178,3 @@ document.addEventListener('DOMContentLoaded', function() {
     // Generate initial passphrase on load
     generateBtn.click();
 });
-
-// Self-test on load (only in development/debug mode)
-console.log('Passphrase Generator Loaded');
-console.log('Word list size:', EFF_WORDLIST ? EFF_WORDLIST.length : 'Not loaded');
-console.log('Bits per word:', BITS_PER_WORD.toFixed(3));
-console.log('Total entropy (20 words):', (20 * BITS_PER_WORD).toFixed(1) + ' bits');
-console.log('Crypto API available:', window.crypto && window.crypto.getRandomValues ? 'Yes' : 'No');
